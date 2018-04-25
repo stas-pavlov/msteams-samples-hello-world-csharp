@@ -15,6 +15,8 @@ using IO.Swagger.Api;
 using IO.Swagger.Client;
 using IO.Swagger.Model;
 
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Teams.Samples.HelloWorld.Web.Dialogs;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 {
@@ -81,10 +83,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                         : new HttpResponseMessage(HttpStatusCode.OK);
                 }
                 else
+                if (activity.Type == ActivityTypes.Message)
                 {
-                    await EchoBot.EchoMessage(connector, activity);
-                    return new HttpResponseMessage(HttpStatusCode.Accepted);
+                    //await EchoBot.EchoMessage(connector, activity);
+                                     
+                                          
+                        await Conversation.SendAsync(activity, () => new QuestionDialog());
+
+                        return new HttpResponseMessage(HttpStatusCode.Accepted);
                 }
+
+                return new HttpResponseMessage(HttpStatusCode.Accepted);
             }
         }
 

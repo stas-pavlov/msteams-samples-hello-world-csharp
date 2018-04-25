@@ -61,12 +61,14 @@ namespace IO.Swagger.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append("class QuestionOptionModel {\n");
-            sb.Append("  Id: ").Append(Id).Append("\n");
-            sb.Append("  Text: ").Append(Text).Append("\n");
-            sb.Append("}\n");
-            return sb.ToString();
+            return Text;
+            
+            //var sb = new StringBuilder();
+            //sb.Append("class QuestionOptionModel {\n");
+            //sb.Append("  Id: ").Append(Id).Append("\n");
+            //sb.Append("  Text: ").Append(Text).Append("\n");
+            //sb.Append("}\n");
+            //return sb.ToString();
         }
   
         /// <summary>

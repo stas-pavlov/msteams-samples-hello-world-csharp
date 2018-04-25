@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Teams;
@@ -7,6 +9,9 @@ using Microsoft.Bot.Connector.Teams.Models;
 using IO.Swagger.Api;
 using IO.Swagger.Client;
 using IO.Swagger.Model;
+
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Teams.Samples.HelloWorld.Web.Dialogs;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -31,13 +36,15 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     
                     var question = await triviaAPI.TriviaGetQuestionAsync(questionRequest);
 
-                    replyText = question.Text;
+                    await Conversation.SendAsync(activity, () => new QuestionDialog());
 
                 }
             }
-
-            var reply = activity.CreateReply(replyText);
-            await connector.Conversations.ReplyToActivityWithRetriesAsync(reply);
+            else
+            { 
+                var reply = activity.CreateReply(replyText);
+                await connector.Conversations.ReplyToActivityWithRetriesAsync(reply);
+            }
         }
     }
 }
