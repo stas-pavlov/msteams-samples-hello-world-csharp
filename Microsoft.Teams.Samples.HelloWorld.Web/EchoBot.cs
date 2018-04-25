@@ -2,6 +2,7 @@
 
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Teams;
+using Microsoft.Bot.Connector.Teams.Models;
 
 using IO.Swagger.Api;
 using IO.Swagger.Client;
@@ -14,6 +15,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         public static async Task EchoMessage(ConnectorClient connector, Activity activity)
         {
 
+            var replyText = "Hi, please print 'trivia' to startt!";
+          
+
             var action = activity.GetTextWithoutMentions();
             if (action.ToLower() == "trivia")
             {
@@ -21,14 +25,19 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                 if (triviaAPI != null)
                 {
-                    
+                    var userAAD = activity.From.Properties["aadObjectId"].ToString();
 
-                    //var question = triviaAPI.TriviaGetQuestionAsync();
+                    QuestionRequesterModel questionRequest = new QuestionRequesterModel(new System.Guid(userAAD));
+                    
+                    var question = await triviaAPI.TriviaGetQuestionAsync(questionRequest);
+
+                    replyText = question.Text;
+
                 }
             }
 
-                var reply = activity.CreateReply("You said: " + activity.GetTextWithoutMentions());
-                await connector.Conversations.ReplyToActivityWithRetriesAsync(reply);
+            var reply = activity.CreateReply(replyText);
+            await connector.Conversations.ReplyToActivityWithRetriesAsync(reply);
         }
     }
 }
