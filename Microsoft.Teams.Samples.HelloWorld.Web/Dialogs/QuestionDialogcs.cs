@@ -13,34 +13,48 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
     [Serializable]
     public class QuestionDialog : IDialog<object>
     {
-
-        private const string ExplorerOption = "Musician Explorer";
-        private const string SearchOption = "Musician Search";
-
-
+        private QuestionModel question = null;
+      
 
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(this.MessageReceivedAsync);
         }
 
+        public async Task QuastionDialog(IDialogContext context)
+        {
+            var userID = new System.Guid(context.Activity.From.Properties["aadObjectId"].ToString());
+            QuestionRequesterModel questionRequest = new QuestionRequesterModel(userID);
+            question = await Microsoft.Teams.Samples.HelloWorld.Web.Controllers.MessagesController.triviaApi.TriviaGetQuestionAsync(questionRequest);
+
+            PromptDialog.Choice(context, this.AfterMenuSelection, question.QuestionOptions, question.Text);
+
+        }
+
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             //Show options whatever users chat
-            var userAAD = context.Activity.From.Properties["aadObjectId"].ToString();
-            QuestionRequesterModel questionRequest = new QuestionRequesterModel(new System.Guid(userAAD));
-            var question = await Microsoft.Teams.Samples.HelloWorld.Web.Controllers.MessagesController.triviaApi.TriviaGetQuestionAsync(questionRequest);
-
-
-            PromptDialog.Choice(context, this.AfterMenuSelection, question.QuestionOptions, question.Text);
+            await QuastionDialog(context);
         }
 
         //After users select option, Bot call other dialogs
-        private async Task AfterMenuSelection(IDialogContext context, IAwaitable<object> result)
+        private async Task AfterMenuSelection(IDialogContext context, IAwaitable<QuestionOptionModel> result)
         {
             var optionSelected = await result;
 
-            context.Call(new QuestionDialog(), this.ResumeAfterOptionDialog);
+            var userID = new System.Guid(context.Activity.From.Properties["aadObjectId"].ToString());
+
+            AnswerModel answer = new AnswerModel(userID, question.Id, optionSelected.Id);
+
+            var result2 = await Microsoft.Teams.Samples.HelloWorld.Web.Controllers.MessagesController.triviaApi.TriviaSubmitAnswerAsync(answer);
+
+            if (result2.Correct.Value)
+                await context.SayAsync(context.Activity.From.Name + ", you are right!");
+            else
+                await context.SayAsync(context.Activity.From.Name +", you are wrong!");
+
+            //context.Call(new QuestionDialog(), this.ResumeAfterOptionDialog);
+            await QuastionDialog(context);
 
         }
 

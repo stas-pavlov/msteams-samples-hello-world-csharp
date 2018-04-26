@@ -27,7 +27,7 @@ namespace IO.Swagger.Model
     /// <summary>
     /// Question for the Trivia API
     /// </summary>
-    [DataContract]
+    [DataContract][Serializable]
     public partial class QuestionModel :  IEquatable<QuestionModel>, IValidatableObject
     {
         /// <summary>
