@@ -85,9 +85,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 else
                 if (activity.Type == ActivityTypes.Message)
                 {
-                    //await EchoBot.EchoMessage(connector, activity);
-                                     
-                                          
                         await Conversation.SendAsync(activity, () => new QuestionDialog());
 
                         return new HttpResponseMessage(HttpStatusCode.Accepted);
