@@ -204,6 +204,14 @@
     <Content Include="Views\Home\Configure.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BotAuth.AADv2\BotAuth.AADv2.csproj">
+      <Project>{32710259-d971-41ae-ad7b-c38985218d54}</Project>
+      <Name>BotAuth.AADv2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BotAuth\BotAuth.csproj">
+      <Project>{54162cb7-bbec-4c8c-b7a9-70144556e3e5}</Project>
+      <Name>BotAuth</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IO.Swagger\IO.Swagger.csproj">
       <Project>{286dfdd9-0d5b-4a9a-827c-a1e16eaffd86}</Project>
       <Name>IO.Swagger</Name>
