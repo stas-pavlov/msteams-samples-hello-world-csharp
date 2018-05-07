@@ -54,7 +54,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
                 Authority = ConfigurationManager.AppSettings["aad:Authority"],
                 ClientId = ConfigurationManager.AppSettings["aad:ClientId"],
                 ClientSecret = ConfigurationManager.AppSettings["aad:ClientSecret"],
-                Scopes = new string[] { "User.Read" },
+                Scopes = new string[] { "User.ReadWrite" },
                 RedirectUrl = ConfigurationManager.AppSettings["aad:Callback"],
                 MagicNumberView = "/magic.html#{0}"
             };
