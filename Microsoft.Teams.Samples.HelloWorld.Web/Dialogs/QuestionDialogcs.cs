@@ -15,6 +15,7 @@ using BotAuth;
 
 using System.Configuration;
 using System.Threading;
+using System.Net.Http;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
 {
@@ -22,8 +23,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
     public class QuestionDialog : IDialog<object>
     {
         private QuestionModel question = null;
-      
-
+          
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(this.MessageReceivedAsync);
@@ -43,8 +43,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
         {
             var message = await result;
 
-
-
+            
             // Initialize AuthenticationOptions and forward to AuthDialog for token
 
             AuthenticationOptions options = new AuthenticationOptions()
@@ -63,13 +62,21 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
             {
                 var resultAuth = await authResult;
 
-                //// Use token to call into service
-                //var json = await new HttpClient().GetWithAuthAsync(result.AccessToken, "https://graph.microsoft.com/v1.0/me");
-                //await authContext.PostAsync($"I'm a simple bot that doesn't do much, but I know your name is {json.Value<string>("displayName")} and your UPN is {json.Value<string>("userPrincipalName")}");
-            }, message, CancellationToken.None);
 
+
+                // Use token to call into service
+                //var json = await new HttpClient().GetWithAuthAsync(resultAuth.AccessToken, "https://graph.microsoft.com/v1.0/me");
+                //await authContext.PostAsync($"I'm a simple bot that doesn't do much, but I know your name is {json.Value<string>("displayName")} and your UPN is {json.Value<string>("userPrincipalName")}");
+                // Wait for another message
+                //authContext.Wait(MessageReceivedAsync);                
+
+            }, message, CancellationToken.None);
+          
+    
             //Show options whatever users chat
-            await QuastionDialog(context);
+            //QuastionDialog(context);
+
+           
         }
 
         //After users select option, Bot call other dialogs
@@ -77,6 +84,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
         {
             var optionSelected = await result;
 
+         
             var userID = new System.Guid(context.Activity.From.Properties["aadObjectId"].ToString());
 
             AnswerModel answer = new AnswerModel(userID, question.Id, optionSelected.Id);
@@ -88,13 +96,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Dialogs
             else
                 await context.SayAsync(context.Activity.From.Name +", you are wrong!");
 
-            //context.Call(new QuestionDialog(), this.ResumeAfterOptionDialog);
-            await QuastionDialog(context);
+ 
+
+            //await QuastionDialog(context);
 
         }
 
         //This function is called after each dialog process is done
-        private async Task ResumeAfterOptionDialog(IDialogContext context, IAwaitable<object> result)
+        private void ResumeAfterOptionDialog(IDialogContext context, IAwaitable<object> result)
         {
             //This means  MessageRecievedAsync function of this dialog (PromptButtonsDialog) will receive users' messeges
             context.Wait(MessageReceivedAsync);

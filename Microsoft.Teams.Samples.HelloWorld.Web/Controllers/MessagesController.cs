@@ -18,6 +18,11 @@ using IO.Swagger.Model;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Teams.Samples.HelloWorld.Web.Dialogs;
 
+using BotAuth.AADv2;
+using BotAuth.Dialogs;
+using BotAuth.Models;
+using BotAuth;
+
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 {
     [BotAuthentication]
@@ -85,9 +90,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 else
                 if (activity.Type == ActivityTypes.Message)
                 {
-                        await Conversation.SendAsync(activity, () => new QuestionDialog());
+                       
+                    await Conversation.SendAsync(activity, () => new QuestionDialog());
 
-                        return new HttpResponseMessage(HttpStatusCode.Accepted);
+                    return new HttpResponseMessage(HttpStatusCode.Accepted);
                 }
 
                 return new HttpResponseMessage(HttpStatusCode.Accepted);

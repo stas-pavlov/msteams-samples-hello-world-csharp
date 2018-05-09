@@ -53,12 +53,12 @@ namespace IO.Swagger.Client
         public ApiClient()
         {
             Configuration = IO.Swagger.Client.Configuration.Default;
-            RestClient = new RestClient("https://msopenhack.azurewebsites.net");
+            RestClient = new RestClient("https://msopenhackeu.azurewebsites.net");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default base path (https://msopenhack.azurewebsites.net).
+        /// with default base path (https://msopenhackeu.azurewebsites.net).
         /// </summary>
         /// <param name="config">An instance of Configuration.</param>
         public ApiClient(Configuration config)
@@ -73,7 +73,7 @@ namespace IO.Swagger.Client
         /// with default configuration.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath = "https://msopenhack.azurewebsites.net")
+        public ApiClient(String basePath = "https://msopenhackeu.azurewebsites.net")
         {
            if (String.IsNullOrEmpty(basePath))
                 throw new ArgumentException("basePath cannot be empty");
